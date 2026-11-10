@@ -6,6 +6,7 @@ const STORE_NAME = "wishes";
 const form = document.querySelector("#wishForm");
 const nameInput = document.querySelector("#name");
 const detailInput = document.querySelector("#detail");
+const voiceSelect = document.querySelector("#voiceSelect");
 const result = document.querySelector("#result");
 const wishText = document.querySelector("#wishText");
 const statusText = document.querySelector("#status");
@@ -78,7 +79,23 @@ function makeWish(name, detail, mood) {
   return extra ? `${text} ${extra}` : text;
 }
 
-function refreshVoices() { voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+function refreshVoices() {
+  voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  if (!voiceSelect) return;
+
+  const selectedName = voiceSelect.value;
+  const polishVoices = voices.filter(voice => voice.lang.toLowerCase().startsWith("pl"));
+  voiceSelect.replaceChildren(new Option("Automatycznie — niższy głos", ""));
+  polishVoices.forEach(voice => voiceSelect.add(new Option(voice.name, voice.name)));
+  if (polishVoices.some(voice => voice.name === selectedName)) voiceSelect.value = selectedName;
+}
+
+function findDefaultPolishVoice() {
+  const polishVoices = voices.filter(voice => voice.lang.toLowerCase().startsWith("pl"));
+  const maleNameHints = /\b(male|man|męski|meski|jacek|marek|jan|adam|piotr|tomasz|michał|michal|krzysztof|paweł|pawel|andrzej)\b/i;
+  return polishVoices.find(voice => maleNameHints.test(voice.name)) || polishVoices[0] || null;
+}
+
 function speak(text) {
   if (!("speechSynthesis" in window)) {
     statusText.textContent = "Ta przeglądarka nie obsługuje odczytywania tekstu.";
@@ -88,10 +105,13 @@ function speak(text) {
   refreshVoices();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "pl-PL";
-  utterance.rate = 0.88;
-  utterance.pitch = 0.82;
-  const polishVoice = voices.find(voice => voice.lang.toLowerCase().startsWith("pl"));
-  if (polishVoice) utterance.voice = polishVoice;
+  utterance.rate = 0.82;
+  utterance.pitch = 0.68;
+
+  const selectedVoice = voices.find(voice => voice.name === voiceSelect.value);
+  const voice = selectedVoice || findDefaultPolishVoice();
+  if (voice) utterance.voice = voice;
+
   utterance.onstart = () => { statusText.textContent = "Mikołaj czyta życzenia…"; };
   utterance.onend = () => { statusText.textContent = ""; };
   utterance.onerror = () => { statusText.textContent = "Nie udało się odtworzyć głosu. Sprawdź ustawienia dźwięku."; };
