@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c2d">
+  <meta name="description" content="Świąteczne życzenia czytane głosem Mikołaja.">
+  <title>List od Mikołaja</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon" aria-hidden="true">🎅</span><span>LIST OD MIKOŁAJA</span></div>
+      <button id="installButton" class="install-button" type="button" hidden>Zainstaluj</button>
+    </header>
+
+    <section class="hero">
+      <div class="snow" aria-hidden="true">✦　❄　✦</div>
+      <p class="eyebrow">ŚWIĄTECZNA POCZTA</p>
+      <h1>Ho, ho, ho!<br>Komu dziś sprawimy radość?</h1>
+      <p class="hero-copy">Przygotuj wyjątkowe życzenia i posłuchaj, jak czyta je Mikołaj.</p>
+    </section>
+
+    <section class="card form-card" aria-labelledby="formTitle">
+      <h2 id="formTitle">Ułóż życzenia</h2>
+      <form id="wishForm">
+        <label for="name">Imię</label>
+        <input id="name" name="name" type="text" maxlength="40" placeholder="np. Lidia" autocomplete="given-name" required>
+        <label for="detail">Jaka jest ta osoba? <span class="optional">(opcjonalnie)</span></label>
+        <input id="detail" name="detail" type="text" maxlength="80" placeholder="np. uwielbia pierogi">
+        <fieldset>
+          <legend>Wybierz klimat</legend>
+          <div class="moods">
+            <label class="mood"><input type="radio" name="mood" value="funny" checked><span>😄 Zabawny</span></label>
+            <label class="mood"><input type="radio" name="mood" value="warm"><span>❤️ Ciepły</span></label>
+          </div>
+        </fieldset>
+        <button class="primary-button" type="submit"><span aria-hidden="true">✨</span> Przygotuj życzenia</button>
+      </form>
+    </section>
+
+    <section id="result" class="card result-card" aria-live="polite" hidden>
+      <div class="result-heading"><span class="gift" aria-hidden="true">🎁</span><div><p class="eyebrow">WIADOMOŚĆ Z BIEGUNA PÓŁNOCNEGO</p><h2>Życzenia gotowe!</h2></div></div>
+      <p id="wishText" class="wish-text"></p>
+      <div class="button-row"><button id="playButton" class="primary-button" type="button">🔊 Odtwórz</button><button id="saveButton" class="secondary-button" type="button">💾 Zapisz</button></div>
+      <p id="status" class="status" role="status"></p>
+    </section>
+
+    <section class="saved-section" aria-labelledby="savedTitle">
+      <div class="section-heading"><div><p class="eyebrow">TWOJA ŚWIĄTECZNA KOLEKCJA</p><h2 id="savedTitle">Zapisane życzenia</h2></div><span id="savedCount" class="count">0</span></div>
+      <div id="savedList" class="saved-list"><p class="empty-state">Zapisane życzenia pojawią się tutaj. 🎄</p></div>
+    </section>
+    <footer>Wesołych Świąt! <span aria-hidden="true">🎄</span></footer>
+  </main>
+  <script src="./app.js" defer></script>
+</body>
+</html>
